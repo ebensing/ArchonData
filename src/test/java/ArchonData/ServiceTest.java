@@ -33,11 +33,11 @@ public class ServiceTest {
             System.setSecurityManager(new RMISecurityManager());
         }
 
-        reg = LocateRegistry.createRegistry(main.PORT);
+        reg = LocateRegistry.createRegistry(runner.PORT);
         DataServer server = new DataServer();
         reg.bind("DataService", server);
 
-        client = (DataService) reg.lookup(main.NAME);
+        client = (DataService) reg.lookup(runner.NAME);
 
     }
 

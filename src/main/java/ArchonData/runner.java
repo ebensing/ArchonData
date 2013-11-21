@@ -14,7 +14,7 @@ import java.rmi.registry.Registry;
  * Date: 11/16/13
  * Time: 11:39 AM
  */
-public class main {
+public class runner {
 
     public static final int PORT = 3809;
     public static final String NAME = "DataService";

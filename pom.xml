@@ -64,7 +64,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ArchonData.main</mainClass>
+                            <mainClass>ArchonData.runner</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

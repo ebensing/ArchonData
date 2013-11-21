@@ -5,7 +5,6 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 import java.net.UnknownHostException;
-import java.util.Properties;
 
 /**
  * User: EJ
@@ -15,7 +14,6 @@ import java.util.Properties;
 public enum MongoResource {
     INSTANCE;
     private MongoClient mongoClient;
-    private Properties properties;
     private String host = "localhost";
     private int port = 27017;
 
@@ -40,7 +38,9 @@ public enum MongoResource {
 
     public Datastore getDatastore(String dbName) {
         Datastore ds;
-        ds = new Morphia().createDatastore(mongoClient,dbName);
+        Morphia morphia = new Morphia();
+        morphia.map(Artist.class).map(User.class);
+        ds = morphia.createDatastore(mongoClient,dbName);
 
         return ds;
     }

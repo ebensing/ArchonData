@@ -1,6 +1,7 @@
 package ArchonData.server;
 
 import ArchonData.data.Artist;
+import ArchonData.data.User;
 import org.bson.types.ObjectId;
 
 import java.rmi.Remote;
@@ -14,6 +15,7 @@ import java.util.List;
  */
 public interface DataService extends Remote {
 
+    // Artist Methods
     public Artist addArtist(Artist artist) throws RemoteException;
     public Artist forceAddArtist(Artist artist) throws RemoteException;
     public Artist updateArtist(Artist artist) throws RemoteException;
@@ -23,4 +25,10 @@ public interface DataService extends Remote {
     public void deleteAllArtists() throws RemoteException;
     public List<Artist> getArtists(String sort) throws RemoteException;
     public Artist getArtist(String name) throws RemoteException;
+
+    // User Methods
+    public User getUser(String name, String password) throws RemoteException;
+    public User addUser(String username, String password) throws RemoteException;
+    public void deleteUser(String username) throws RemoteException;
+    public void deleteAllUsers() throws RemoteException;
 }

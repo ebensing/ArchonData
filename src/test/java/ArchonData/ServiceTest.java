@@ -1,6 +1,7 @@
 package ArchonData;
 
 import ArchonData.data.Artist;
+import ArchonData.data.User;
 import ArchonData.server.DataServer;
 import ArchonData.server.DataService;
 import org.junit.After;
@@ -32,17 +33,18 @@ public class ServiceTest {
             System.setSecurityManager(new RMISecurityManager());
         }
 
-        reg = LocateRegistry.createRegistry(main.port);
+        reg = LocateRegistry.createRegistry(main.PORT);
         DataServer server = new DataServer();
         reg.bind("DataService", server);
 
-        client = (DataService) reg.lookup("DataService");
+        client = (DataService) reg.lookup(main.NAME);
 
     }
 
     @After
     public void cleanUp() throws Exception {
         client.deleteAllArtists();
+        client.deleteAllUsers();
         UnicastRemoteObject.unexportObject(reg, true);
     }
 
@@ -211,5 +213,83 @@ public class ServiceTest {
 
         assertEquals(all.size(), 0);
     }
+
+    @Test
+    public void testValidateUser() throws RemoteException {
+
+        String name = "test";
+        String password = "password";
+        User user = client.addUser(name, password);
+
+        User res1 = client.getUser(name, password);
+
+        assertEquals(res1.getUsername(), user.getUsername());
+
+        User res2 = client.getUser(name, "notpassword");
+
+        assertEquals(res2, null);
+
+        User res3 = client.getUser("nottest", password);
+
+        assertEquals(res3, null);
+
+    }
+
+    @Test
+    public void testAddUser() throws RemoteException {
+        String name = "test";
+        String password = "password";
+        User user = client.addUser(name, password);
+
+        assertEquals(user.getUsername(), name);
+
+        User res1 = client.getUser(name, password);
+
+        assertEquals(res1.getUsername(), user.getUsername());
+
+    }
+
+    @Test
+    public void testDeleteUser() throws RemoteException {
+
+        String name1 = "test";
+        String password1 = "password";
+        User user1 = client.addUser(name1, password1);
+
+        String name2 = "test2";
+        String password2 = "password2";
+        User user2 = client.addUser(name2, password2);
+
+        client.deleteUser(user1.getUsername());
+
+        User res1 = client.getUser(name1, password1);
+        User res2 = client.getUser(name2, password2);
+
+        assertEquals(res1, null);
+        assertEquals(res2.getUsername(), user2.getUsername());
+
+    }
+
+    @Test
+    public void testDeleteAllUsers() throws RemoteException {
+
+        String name1 = "test";
+        String password1 = "password";
+        client.addUser(name1, password1);
+
+        String name2 = "test2";
+        String password2 = "password2";
+        client.addUser(name2, password2);
+
+        client.deleteAllUsers();
+
+        User res1 = client.getUser(name1, password1);
+        User res2 = client.getUser(name2, password2);
+
+        assertEquals(res1, null);
+        assertEquals(res2, null);
+
+    }
+
 
 }

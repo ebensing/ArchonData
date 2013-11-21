@@ -4,7 +4,6 @@ import ArchonData.server.DataServer;
 
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
-import java.rmi.Naming;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -17,7 +16,8 @@ import java.rmi.registry.Registry;
  */
 public class main {
 
-    public static final int port = 3809;
+    public static final int PORT = 3809;
+    public static final String NAME = "DataService";
 
     public static void main(String[] args) throws RemoteException, AlreadyBoundException, MalformedURLException {
         if (System.getSecurityManager() == null) {
@@ -25,8 +25,8 @@ public class main {
         }
 
         DataServer server = new DataServer();
-        Registry registry = LocateRegistry.createRegistry(port);
-        registry.bind("DataService", server);
+        Registry registry = LocateRegistry.createRegistry(PORT);
+        registry.bind(NAME, server);
 
         System.out.println("DataService bound...");
     }

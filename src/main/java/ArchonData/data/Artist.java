@@ -1,20 +1,14 @@
 package ArchonData.data;
 
-import ArchonData.util.ObjectIdJsonDeserializer;
-import ArchonData.util.ObjectIdJsonSerializer;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Transient;
 import org.mongodb.morphia.mapping.Mapper;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,11 +21,7 @@ import java.util.Map;
  */
 
 @Entity
-public class Artist implements Serializable {
-
-    @SuppressWarnings("UnusedDeclaration")
-    @JsonDeserialize(using=ObjectIdJsonDeserializer.class)
-    @Id private ObjectId id;
+public class Artist extends BaseData {
 
     private String name;
     private int seen;
@@ -81,12 +71,6 @@ public class Artist implements Serializable {
     public void setName(String name) {
         this.changed.put("name", true);
         this.name = name;
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    @JsonSerialize(using=ObjectIdJsonSerializer.class)
-    public ObjectId getId() {
-        return id;
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -175,7 +159,7 @@ public class Artist implements Serializable {
     }
 
     public Query<Artist> getIdQuery(Datastore db) {
-        return db.createQuery(Artist.class).field(Mapper.ID_KEY).equal(id);
+        return db.createQuery(Artist.class).field(Mapper.ID_KEY).equal(getId());
     }
 
 
